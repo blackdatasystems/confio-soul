@@ -1,10 +1,23 @@
 <?php
 namespace SoulFramework;
 
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
+
 class SoulException extends \Exception
 {
+    /**
+     * @param \Exception $exception
+     * @throws \Exception
+     */
     public static function catchException($exception)
     {
+        // Log the exception.
+        // TODO: Use a shared log object from the app.
+        $logger = new Logger('confio-api');
+        $logger->pushHandler(new StreamHandler('php://stdout', Logger::DEBUG));
+        $logger->error($exception);
+
         if ($exception->getCode() == 404) {
             if (class_exists('App\Controller\StaticController')) {
                 $controller = new \App\Controller\StaticController();
@@ -18,6 +31,7 @@ class SoulException extends \Exception
                 $message['Message'] = $exception->getMessage();
                 $message['File'] = $exception->getFile();
                 $message['line'] = $exception->getLine();
+                $message['trace'] = $exception->getTraceAsString();
 
                 if (php_sapi_name() != 'cli') {
                     header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
@@ -43,9 +57,9 @@ class SoulException extends \Exception
             echo json_encode(
                 [
                     'code'      => $message['code'],
-                    'message'   =>  $message['Message'],
+                    'message'   => $message['Message'],
                     'file'      => $message['File'],
-                    'line'      => $message['line']
+                    'line'      => $message['line'],
                 ]
             );
         } else {
@@ -54,6 +68,10 @@ class SoulException extends \Exception
             echo "<strong>{$message['Message']}</strong> ";
             echo "<br /><strong>file:</strong> {$message['File']} ";
             echo "<br /><strong>line:</strong> {$message['line']} ";
+            echo "<br /><strong>trace:</strong>";
+            foreach (explode("\n", $message['trace']) as $trace) {
+                echo "<br />$trace";
+            }
         }
     }
 
