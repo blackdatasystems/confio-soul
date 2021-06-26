@@ -14,7 +14,7 @@ class SoulException extends \Exception
     {
         // Log the exception.
         // TODO: Use a shared log object from the app.
-        $logger = new Logger('confio-api');
+        $logger = new Logger('soul');
         $logger->pushHandler(new StreamHandler('php://stdout', Logger::DEBUG));
         $logger->error($exception);
 

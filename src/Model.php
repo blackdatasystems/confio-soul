@@ -1,6 +1,8 @@
 <?php
 namespace SoulFramework;
 
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 use PDO;
 use PDOStatement;
 
@@ -105,6 +107,13 @@ class Model extends SoulObject
                     $statement->bindValue($key, $input, $paramType);
                 }
             }
+
+            // Log the exception.
+            // TODO: Use a shared log object from the app.
+            $logger = new Logger('soul');
+            $logger->pushHandler(new StreamHandler('php://stdout', Logger::DEBUG));
+            $logger->debug('Executing query ' . $sql . ' with parameters: ' . ($input_parameters ? json_encode($input_parameters) : '{}'));
+
             if (!$statement->execute()) {
                 $errorInfo = implode(' : ', $statement->errorInfo());
                 throw new \Exception("SQL ERROR: $errorInfo \r\n $sql");
@@ -215,6 +224,11 @@ class Model extends SoulObject
             $rs->bindValue(":$key", $value);
         }
 
+        // Log the exception.
+        // TODO: Use a shared log object from the app.
+        $logger = new Logger('soul');
+        $logger->pushHandler(new StreamHandler('php://stdout', Logger::DEBUG));
+        $logger->debug('Executing query ' . $sql . ' with parameters: ' . ($params ? json_encode($params) : '{}'));
 
         if ($rs->execute()) {
             return $this->lastInsertId();
@@ -248,6 +262,13 @@ class Model extends SoulObject
             $rs->bindValue(":$key", $value);
         }
         $rs->bindValue(':primary_key_id', $id);
+
+        // Log the exception.
+        // TODO: Use a shared log object from the app.
+        $logger = new Logger('soul');
+        $logger->pushHandler(new StreamHandler('php://stdout', Logger::DEBUG));
+        $logger->debug('Executing query ' . $sql . ' with parameters: ' . ($params ? json_encode($params) : '{}'));
+
 
         if ($rs->execute()) {
             return true;
