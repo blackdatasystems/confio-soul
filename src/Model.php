@@ -110,9 +110,9 @@ class Model extends SoulObject
 
             // Log the exception.
             // TODO: Use a shared log object from the app.
-            $logger = new Logger('soul');
-            $logger->pushHandler(new StreamHandler('php://stdout', Logger::DEBUG));
-            $logger->debug('Executing query ' . $sql . ' with parameters: ' . ($input_parameters ? json_encode($input_parameters) : '{}'));
+            // $logger = new Logger('soul');
+            // $logger->pushHandler(new StreamHandler('php://stdout', Logger::DEBUG));
+            // $logger->debug('Executing query ' . $sql . ' with parameters: ' . ($input_parameters ? json_encode($input_parameters) : '{}'));
 
             if (!$statement->execute()) {
                 $errorInfo = implode(' : ', $statement->errorInfo());
@@ -226,9 +226,9 @@ class Model extends SoulObject
 
         // Log the exception.
         // TODO: Use a shared log object from the app.
-        $logger = new Logger('soul');
-        $logger->pushHandler(new StreamHandler('php://stdout', Logger::DEBUG));
-        $logger->debug('Executing query ' . $sql . ' with parameters: ' . ($params ? json_encode($params) : '{}'));
+        // $logger = new Logger('soul');
+        // $logger->pushHandler(new StreamHandler('php://stdout', Logger::DEBUG));
+        // $logger->debug('Executing query ' . $sql . ' with parameters: ' . ($params ? json_encode($params) : '{}'));
 
         if ($rs->execute()) {
             return $this->lastInsertId();
@@ -265,9 +265,9 @@ class Model extends SoulObject
 
         // Log the exception.
         // TODO: Use a shared log object from the app.
-        $logger = new Logger('soul');
-        $logger->pushHandler(new StreamHandler('php://stdout', Logger::DEBUG));
-        $logger->debug('Executing query ' . $sql . ' with parameters: ' . ($params ? json_encode($params) : '{}'));
+        // $logger = new Logger('soul');
+        // $logger->pushHandler(new StreamHandler('php://stdout', Logger::DEBUG));
+        // $logger->debug('Executing query ' . $sql . ' with parameters: ' . ($params ? json_encode($params) : '{}'));
 
 
         if ($rs->execute()) {
