@@ -54,6 +54,7 @@ class Controller extends SoulObject
         ob_start();
         include(VIEWS_PATH.DS.'layouts'.DS.$layout.'.php');
         ob_flush();
+        flush();
     }
         
     private function renderView($view, $data)
@@ -61,6 +62,7 @@ class Controller extends SoulObject
         ob_start();
         include(VIEWS_PATH.DS.$view.'.php');
         ob_flush();
+        flush();
     }
 
     protected function renderElement($element, $data = null)
